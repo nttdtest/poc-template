@@ -16,7 +16,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    uses: launchbynttdata/launch-workflows/.github/workflows/reusable-terraform-check-azure.yml@0.14.1
+    uses: launchbynttdata/launch-workflows/.github/workflows/reusable-terraform-check-azure.yml@0.14.2
     secrets: inherit # pragma: allowlist secret
 
   check-aws:
@@ -26,7 +26,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    uses: launchbynttdata/launch-workflows/.github/workflows/reusable-terraform-check-aws.yml@0.14.1
+    uses: launchbynttdata/launch-workflows/.github/workflows/reusable-terraform-check-aws.yml@0.14.2
     with:
       assume_role_arn: ${{ vars.TERRAFORM_CHECK_AWS_ASSUME_ROLE_ARN }}
       region: ${{ vars.TERRAFORM_CHECK_AWS_REGION }}
@@ -43,14 +43,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
 
       - name: Setup asdf
         # We use the 'setup' variant of this action, because we have some custom behavior in
         # our .tool-versions file and Makefile to install plugins from outside the default registry.
         uses: asdf-vm/actions/setup@b7bcd026f18772e44fe1026d729e1611cc435d47
 
-      - uses: actions/cache/restore@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
+      - uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7
         # If we've cached the asdf tools, restore them based on the hash of the .tool-versions file.
         name: Restore cached asdf tools
         id: cache
