@@ -80,7 +80,11 @@ jobs:
           make test
 
   check-complete:
+<<<<<<< before updating
     name: "Terraform Check Complete"
+=======
+    name: "Check Complete"
+>>>>>>> after updating
     needs: [check-azure, check-aws, check-other]
     if: always()
     permissions:
