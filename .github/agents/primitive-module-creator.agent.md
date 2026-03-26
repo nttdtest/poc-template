@@ -21,7 +21,7 @@ This document provides context and instructions for AI coding assistants working
 - **1.1** – Added cloud provider API verification patterns (Azure, AWS, GCP) to Terratest guidance; tests must now verify real resource state via provider SDKs, not just Terraform outputs
 - **1.0** – Initial release
 
-> **For agents working in the skeleton repo (`lcaf-skeleton-terraform`):** If you modify this file, update the `<!-- version -->` comment at the top and add a changelog entry here. Bump the minor version (e.g. 1.1 → 1.2) for new guidance or clarifications; bump the major version (e.g. 1.x → 2.0) for changes that would require significant rework of existing modules.
+> **For agents working in the skeleton repo (`poc-skeleton`):** If you modify this file, update the `<!-- version -->` comment at the top and add a changelog entry here. Bump the minor version (e.g. 1.1 → 1.2) for new guidance or clarifications; bump the major version (e.g. 1.x → 2.0) for changes that would require significant rework of existing modules.
 
 > **Maintenance rule — keep guidance generic.** This guide applies to ALL primitive modules across all cloud providers, not just the resource type used in any particular experiment. When updating this file, do not embed service-specific attribute names (e.g., `VisibilityTimeout`, `KmsMasterKeyId`, `BucketName`) into patterns meant to be universal. If a concrete example helps clarify a pattern, show one per cloud provider and label each clearly (e.g., "Azure example," "AWS example," "GCP example"). Prefer generic placeholders like `<resource-specific attribute>` in WRONG/RIGHT comparisons and checklists.
 
@@ -57,7 +57,7 @@ You are most likely helping create or modify a **primitive module**.
 
 8. **The example MUST use the most secure configuration.** If the organization's Regula/OPA policies would flag a security concern (e.g., encryption should use customer-managed keys rather than provider-managed defaults), the example must demonstrate the secure pattern (e.g., create a KMS/CMEK key module and pass it). The example is the reference implementation. Run `make check` (or Regula/Conftest) before considering the module complete — common rules include: AWS SQS queues require KMS encryption (FG_R00070); S3 buckets require encryption; etc.
 
-9. **Skeleton remnants MUST be completely removed.** This includes: Makefile `init-clean` target with `TEMPLATED_README.md` references, skeleton comments in `tests/testimpl/types.go`, TODO placeholders in README.md, and all references to `lcaf-skeleton-terraform` outside of `.github/agents/`. See [Skeleton Cleanup Checklist](#skeleton-cleanup-checklist).
+9. **Skeleton remnants MUST be completely removed.** This includes: Makefile `init-clean` target with `TEMPLATED_README.md` references, skeleton comments in `tests/testimpl/types.go`, TODO placeholders in README.md, and all references to `poc-template` outside of `.github/agents/`. See [Skeleton Cleanup Checklist](#skeleton-cleanup-checklist).
 
 10. **Output `id` description must be accurate.** For resources where `id` equals another attribute (e.g., a queue's `id` is the same as its `url`, or a storage account's `id` is the full ARM resource path), use a clarifying description like `"The ID of the resource (same as the <other attribute>)."` — do not use the exact same description for both outputs.
 
@@ -1157,9 +1157,9 @@ When transforming the skeleton into a new primitive module, complete ALL of thes
 - [ ] **`examples/with_cake/`** → Delete skeleton example directory
 
 ### Files to Update
-- [ ] **`go.mod`** → Update the `lcaf-skeleton-terraform` portion of the `github.com/launchbynttdata/lcaf-skeleton-terraform` header to your module name
+- [ ] **`go.mod`** → Update the `poc-template` portion of the `github.com/nttdtest/poc-template` header to your module name
 - [ ] **Test imports** → Update all Go import paths to match new `go.mod` module path
-- [ ] **CI workflow skeleton guard** → Remove the `if: github.repository != 'launchbynttdata/lcaf-skeleton-terraform'` condition from all workflow files
+- [ ] **CI workflow skeleton guard** → Remove the `if: github.repository != 'nttdtest/poc-template'` condition from all workflow files
 - [ ] **README.md** → Replace Azure-specific references (ARM_CLIENT_ID, azure_env.sh, azurerm provider) with provider-appropriate content
 
 ### Placeholders and TODOs to Remove
@@ -1214,7 +1214,7 @@ Before considering the module complete, walk through EVERY item below. Each item
 ### Skeleton Cleanup
 - [ ] Is `TEMPLATED_README.md` deleted?
 - [ ] Is `examples/with_cake/` deleted?
-- [ ] Are there zero references to `lcaf-skeleton-terraform` outside `.github/agents/`?
+- [ ] Are there zero references to `poc-template` outside `.github/agents/`?
 - [ ] Is the `go.mod` module path updated?
 - [ ] Are all Go import paths updated to match?
 - [ ] Is the CI workflow skeleton guard (`if: github.repository != ...`) removed?
