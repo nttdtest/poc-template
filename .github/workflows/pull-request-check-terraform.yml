@@ -1,4 +1,4 @@
-name: Check Terraform Code
+name: "Check Terraform Code"
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ permissions:
 jobs:
   check-azure:
     if: ${{ contains(github.event.pull_request.head.repo.full_name, 'tf-az') }}
-    name: "Check Terraform Code"
+    name: "Check Azure Terraform Code"
     permissions:
       contents: read
       id-token: write
@@ -21,7 +21,7 @@ jobs:
 
   check-aws:
     if: ${{ contains(github.event.pull_request.head.repo.full_name, 'tf-aws') }}
-    name: "Check Terraform Code"
+    name: "Check AWS Terraform Code"
     # Remove the following line after copying to your own repository
     permissions:
       contents: read
@@ -35,7 +35,7 @@ jobs:
   # Anything that isn't Azure or AWS doesn't have a reusable workflow (yet), so we'll just run the checks directly in this workflow.
   # No authentication is performed here, so this is only suitable for TF modules that don't touch cloud resources.
   check-other:
-    name: "Check Terraform Code"
+    name: "Check Other Terraform Code"
     if: ${{ !contains(github.event.pull_request.head.repo.full_name, 'tf-az') && !contains(github.event.pull_request.head.repo.full_name, 'tf-aws') }}
     permissions:
       contents: read
@@ -78,3 +78,43 @@ jobs:
       - name: "make test"
         run: |
           make test
+
+  check-complete:
+    name: "Check Complete"
+    needs: [check-azure, check-aws, check-other]
+    if: always()
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Combined Check Status"
+        run: |
+          AZURE_RESULT="${{ needs.check-azure.result }}"
+          AWS_RESULT="${{ needs.check-aws.result }}"
+          OTHER_RESULT="${{ needs.check-other.result }}"
+
+          echo "Azure check: $AZURE_RESULT"
+          echo "AWS check: $AWS_RESULT"
+          echo "Other check: $OTHER_RESULT"
+
+          # Fail if any executed check failed or was cancelled
+          if [[ "$AZURE_RESULT" == "failure" || "$AZURE_RESULT" == "cancelled" ]]; then
+            echo "::error::Azure check failed"
+            exit 1
+          fi
+          if [[ "$AWS_RESULT" == "failure" || "$AWS_RESULT" == "cancelled" ]]; then
+            echo "::error::AWS check failed"
+            exit 1
+          fi
+          if [[ "$OTHER_RESULT" == "failure" || "$OTHER_RESULT" == "cancelled" ]]; then
+            echo "::error::Other check failed"
+            exit 1
+          fi
+
+          # Fail if all checks were skipped
+          if [[ "$AZURE_RESULT" == "skipped" && "$AWS_RESULT" == "skipped" && "$OTHER_RESULT" == "skipped" ]]; then
+            echo "::error::All checks were skipped - at least one must run"
+            exit 1
+          fi
+
+          echo "All required checks passed"
