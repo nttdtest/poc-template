@@ -18,11 +18,15 @@ updates:
     directory: "/"
     multi-ecosystem-group: "module"
     patterns: ["*"]
+    cooldown:
+      default-days: 14
 
   - package-ecosystem: "terraform"
     directory: "/"
     multi-ecosystem-group: "module"
     patterns: ["*"]
+    cooldown:
+      default-days: 14
     ignore:
       - dependency-name: "hashicorp/*"
         update-types: ["version-update:semver-major"]
