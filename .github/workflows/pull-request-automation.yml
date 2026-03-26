@@ -7,7 +7,8 @@ permissions:
   contents: read
 
 jobs:
-  dependabot-automerge:
+  approvals:
+    name: Update Automated Approvals
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' || github.actor == 'launch-skeleton-auto-updater[bot]' }}
     steps:
