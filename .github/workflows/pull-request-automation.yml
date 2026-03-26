@@ -2,6 +2,10 @@ name: Automated Approvals
 on:
   pull_request:
 
+permissions:
+  pull-requests: read
+  contents: read
+
 jobs:
   dependabot-automerge:
     runs-on: ubuntu-latest
