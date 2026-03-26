@@ -13,9 +13,17 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
+      - id: get-app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.LAUNCH_SKELETON_UPDATE_APP_ID }}
+          private-key: ${{ secrets.LAUNCH_SKELETON_UPDATE_KEY }}
+
       - id: checkout
         name: Checkout Repository
         uses: actions/checkout@v6
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
 
       - id: setup-python
         name: Set up Python 3.14
@@ -52,13 +60,6 @@ jobs:
             echo "Changes detected"
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
-
-      - id: get-app-token
-        uses: actions/create-github-app-token@v3
-        if: steps.run-updates.outputs.has_changes == 'true'
-        with:
-          app-id: ${{ vars.LAUNCH_SKELETON_UPDATE_APP_ID }}
-          private-key: ${{ secrets.LAUNCH_SKELETON_UPDATE_KEY }}
 
       - name: Commit and Push Changes
         id: commit-and-push
