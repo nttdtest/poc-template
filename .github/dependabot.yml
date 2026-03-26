@@ -6,7 +6,7 @@ multi-ecosystem-groups:
       interval: "weekly"
   workflows:
     schedule:
-      interval: "weekly"
+      interval: "daily"
 
 updates:
   - package-ecosystem: "github-actions"
