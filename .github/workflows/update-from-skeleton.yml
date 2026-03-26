@@ -69,7 +69,7 @@ jobs:
           git config --global user.name '${{ steps.get-app-token.outputs.app-slug }}[bot]'
           git config --global user.email "$USER_ID+${{ steps.get-app-token.outputs.app-slug }}[bot]@users.noreply.github.com"
 
-          BRANCH_NAME="patch/skeleton-update-$(date +%Y%m%d)"
+          BRANCH_NAME="patch/skeleton-update-$(date +%Y%m%d-%H%M%S)"
           echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
           git checkout -b "$BRANCH_NAME"
           git add .
