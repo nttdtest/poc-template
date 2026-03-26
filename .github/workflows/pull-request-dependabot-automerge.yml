@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   dependabot-automerge:
+    name: Enable Automerge
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
