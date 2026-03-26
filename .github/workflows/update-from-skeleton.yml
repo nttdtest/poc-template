@@ -39,10 +39,10 @@ jobs:
 
           if [ "$SKELETON_RELEASE_TRAIN" == "prerelease" ]; then
             echo "Using prerelease versions of skeleton workflows"
-            uv run copier update --defaults --overwrite --prerelease
+            uv run copier update --defaults --prerelease
           else
             echo "Using stable versions of skeleton workflows"
-            uv run copier update --defaults --overwrite
+            uv run copier update --defaults
           fi
 
           if git diff --quiet; then
